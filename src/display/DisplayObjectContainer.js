@@ -51,7 +51,7 @@ var DisplayObjectContainer = (function(DisplayObject){
             throw new Error('adding child with unsupported type:',typeof(child));
 
         this._info.children.push(child);
-        this[child.name] = child;
+        this[child._info.name] = child;
 
         child.addTo(this,this._info.children.length-1);
         return child;
