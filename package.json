@@ -1,7 +1,7 @@
 {
   "name": "graphicengine",
   "title": "GraphicEngine",
-  "description": "Bookmarklet UI Tool for easily check layout implementations",
+  "description": "Brings Flash-like coding style into JavaScript environment using HTMLCanvasElement",
   "version": "0.1.0",
   "author": {
     "name": "FabioDiMonte"
