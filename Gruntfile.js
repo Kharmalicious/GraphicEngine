@@ -158,6 +158,7 @@ module.exports = function(grunt) {
             }
             else if(s.isDirectory()){
                 ret.packages = ret.packages.concat(filesList(path+v+'/',base).packages);
+                ret.rows.push('gep["'+v+'"]={};');
                 ret.rows = ret.rows.concat(filesList(path+v+'/',base).rows);
             }
         });
