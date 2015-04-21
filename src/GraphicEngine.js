@@ -2,7 +2,7 @@
  * Created by fdimonte on 20/04/2015.
  */
 
-var GraphicEngine = (function($,GEPackage,Stage){
+var GraphicEngine = (function($,GEPackage,Stage,Point){
 
     /**
      * GraphicEngine Class
@@ -164,6 +164,82 @@ var GraphicEngine = (function($,GEPackage,Stage){
 
             objects.sort(function(a,b){return (b.zindex - a.zindex);});
             return objects;
+        },
+
+        draw: {
+
+            grid: function(stage,size,unit,opt,isIso) {
+                size || (size = [10,10]);
+                unit || (unit = 10);
+                opt  || (opt = {});
+
+                opt.strokeSize  || (opt.strokeSize = 1);
+                opt.strokeColor || (opt.strokeColor = 0);
+                opt.alpha       || (opt.alpha =.8);
+
+                var from,to;
+
+                stage.draw.setup(opt);
+                for (var w=0;w<=size[0];w++) {
+                    from = new Point(w*unit,0);
+                    to = new Point(w*unit,size[0]*unit);
+                    stage.draw.line(from,to,isIso);
+                }
+                for (var h=0;h<=size[1];h++) {
+                    from = new Point(0,h*unit);
+                    to = new Point(size[1]*unit,h*unit);
+                    stage.draw.line(from,to,isIso);
+                }
+                stage.draw.render();
+            },
+
+            line: function(stage,from,to,opt,isIso) {
+                if(stage==null || from==null || to==null) return;
+
+                opt && stage.draw.setup(opt);
+                stage.draw.line(from,to,isIso);
+                stage.draw.render();
+            },
+
+            axis: function(stage,length,isIso) {
+                length || (length=100);
+
+                var aX = [length,0,0];
+                var aY = [0,length,0];
+                var aZ = [0,0,length];
+
+                stage.draw.setup({strokeColor:0x0});
+                stage.draw.line([0, 0, 0], aX, isIso);
+                stage.draw.line([0, 0, 0], aY, isIso);
+                stage.draw.line([0, 0, 0], aZ, isIso);
+                stage.draw.render();
+            },
+
+            get3DPolygonSquare: function(size) {
+                return [
+                    [0,    0,    0],
+                    [size, 0,    0],
+                    [size, size, 0],
+                    [0,    size, 0]
+                ];
+            },
+            get3DPolygonSquareRight: function(size) {
+                return [
+                    [0, 0,    0   ],
+                    [0, size, 0   ],
+                    [0, size, size],
+                    [0, 0,    size]
+                ];
+            },
+            get3DPolygonSquareLeft: function(size) {
+                return [
+                    [0,    0, 0   ],
+                    [0,    0, size],
+                    [size, 0, size],
+                    [size, 0, 0   ]
+                ];
+            }
+
         }
 
     };
@@ -182,4 +258,4 @@ var GraphicEngine = (function($,GEPackage,Stage){
 
     return GraphicEngine;
 
-}(jQuery,GEPackage,Stage));
+}(jQuery,GEPackage,Stage,Point));
