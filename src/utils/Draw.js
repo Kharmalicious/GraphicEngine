@@ -95,19 +95,30 @@ var Draw = (function(){
             ];
         },
 
-        line: function(from,to) {
+        line: function(from,to,isIso) {
             if(!from || !to) return false;
             from = this.castToPoint(from);
             to = this.castToPoint(to);
+
+            if(isIso){
+                from = from.toOrtho();
+                to = to.toOrtho();
+            }
 
             var coord = {from:from, to:to};
             return this.moveTo(coord.from.x, coord.from.y) && this.lineTo(coord.to.x, coord.to.y);
         },
 
-        polygon: function(points,origin) {
+        polygon: function(points,origin,isIso) {
             if(!points) return [];
             if(!origin) origin = [0,0];
             origin = this.castToPoint(origin);
+
+            if(isIso){
+                points = points.map(function(v,i,a){
+                    return this.castToPoint(v).toOrtho();
+                }.bind(this));
+            }
 
             var i,p,
                 o = origin.add(points[0]);
