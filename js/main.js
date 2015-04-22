@@ -2,7 +2,7 @@ var isoEngine,isoGrid;
 
 $(document).ready(function(){
 
-    isoEngine = new IsoEngine();
+    isoEngine = new GraphicEngine();
     isoEngine.init($('#iso-container'),{
         worldSizeWidth  : 500,
         worldSizeHeight : 500
@@ -17,9 +17,9 @@ $(document).ready(function(){
 
 });
 
-function drawSquare(stage,origin,size,opt) {
+function drawSquare(stage,origin,size,opt,isIso) {
     var points = stage.parent.polygonSquare(size);
     stage.draw.setup(opt);
-    stage.draw.polygon(origin,points,true);
+    stage.draw.polygon(origin,points,true,isIso);
     stage.draw.render();
 }
