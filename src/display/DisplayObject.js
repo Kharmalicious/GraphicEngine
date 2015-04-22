@@ -12,34 +12,31 @@ var DisplayObject = (function(ObjectModel,Point){
      */
     function DisplayObject(name) {
         if(!name) throw new Error('no "name" provided for this displayObject:',this);
-        if(name[0]==='_') throw new Error('DisplayObject names cannot begin with underscore');
 
         ObjectModel.call(this);
 
+        this._name = name;
+        this._parent = null;
+        this._zIndex = 0;
+        this._position = new Point();
+        this._shape = null;
+
         this._info = {
-
-            name     : name,
-            zIndex   : 0,
-            position : new Point(),
-            parent   : null,
-            shape    : null,
-
-            stepCallback : null,// {function} callback to be called by this.step() method
+            stepCallback : null,// {function} callback to be called by this._step() method
             renderMethod : null,// {string} can be 'polygon', 'text', 'image'
             renderInfo   : null // {object} will be the first parameter of renderMethod call
-
         };
 
         // default drawing options
         this._options = {
-
             strokeColor: 0x0,
             fillColor: 0x0,
             strokeSize: 1,
             alpha: 1,
             font: '14px Arial'
-
         };
+
+        if(this[name]) throw new Error('property "%s" already exists on',name,this);
     }
 
     /**
@@ -54,16 +51,13 @@ var DisplayObject = (function(ObjectModel,Point){
      ******************************/
 
     // ADD/REMOVE
-    DisplayObject.prototype.addTo = function(parent,zindex) {
+    DisplayObject.prototype._addTo = function(parent,zindex) {
 
-        //if(!(parent instanceof DisplayObjectContainer))
-        //    throw new Error('displayObject added to unsupported object:',typeof(parent));
-
-        this._info.zIndex = zindex || 0;
-        this._info.parent = parent;
+        this._zIndex = zindex || 0;
+        this._parent = parent;
 
     };
-    DisplayObject.prototype.remove = function() {
+    DisplayObject.prototype._remove = function() {
         delete this;
     };
 
@@ -75,12 +69,12 @@ var DisplayObject = (function(ObjectModel,Point){
     };
 
     // RENDER
-    DisplayObject.prototype.render = function(stage) {
+    DisplayObject.prototype._render = function(stage) {
         if(!this._info.renderMethod) throw new Error('no renderMethod set for this instance of DisplayObject: ',this);
         if(!this._info.renderInfo) return false;
 
         stage.draw.setup(this._options);
-        this._info.shape = stage.draw[this._info.renderMethod](this._info.renderInfo,this._info.position);
+        this._shape = stage.draw[this._info.renderMethod](this._info.renderInfo,this._position);
         stage.draw.render();
 
         return true;
@@ -91,7 +85,7 @@ var DisplayObject = (function(ObjectModel,Point){
     };
 
     // ANIMATION
-    DisplayObject.prototype.step = function(time) {
+    DisplayObject.prototype._step = function(time) {
         if(this._info.stepCallback){
             this._info.stepCallback(time);
         }

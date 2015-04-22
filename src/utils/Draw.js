@@ -115,7 +115,7 @@ var Draw = (function(){
             origin = this.castToPoint(origin);
 
             if(isIso){
-                points = points.map(function(v,i,a){
+                points = points.map(function(v){
                     return this.castToPoint(v).toOrtho();
                 }.bind(this));
             }

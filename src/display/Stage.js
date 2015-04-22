@@ -39,25 +39,25 @@ var Stage = (function($,DisplayObjectContainer){
      * OVERRIDE METHODS
      ******************************/
 
-    Stage.prototype.render = function() {
+    Stage.prototype._render = function() {
         this.clear();
-        DisplayObjectContainer.prototype.render.call(this,this);
+        DisplayObjectContainer.prototype._render.call(this,this);
     };
 
-    Stage.prototype.remove = function() {
+    Stage.prototype._remove = function() {
         //TODO: improve the removing process (clear children and childrenMap on the parent)
         this.$el.remove();
     };
 
-    Stage.prototype.addTo = function(engine) {
+    Stage.prototype._addTo = function(engine) {
         if(!engine) return;
-        if(!(engine instanceof require('GraphicEngine')))
-            throw new Error('stage added to unsupported object:',typeof(engine));
+        //if(!(engine instanceof require('GraphicEngine')))
+        //    throw new Error('stage added to unsupported object:',typeof(engine));
 
         var world_size = engine.worldSize();
         this.setSize(world_size.w, world_size.h);
         this.$el.appendTo(engine.$el);
-        this._info.parent = engine;
+        this.parent = engine;
     };
 
     /******************************

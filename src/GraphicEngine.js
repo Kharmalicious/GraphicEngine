@@ -86,7 +86,7 @@ var GraphicEngine = (function($,GEPackage,Stage,Point){
          */
         addLayer: function(name) {
             var layer = new Stage(name);
-            layer.addTo(this);
+            layer._addTo(this);
 
             this.layers[name] = layer;
             return layer;

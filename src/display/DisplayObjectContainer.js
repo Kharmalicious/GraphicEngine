@@ -13,7 +13,25 @@ var DisplayObjectContainer = (function(DisplayObject){
     function DisplayObjectContainer(name){
         DisplayObject.call(this,name);
 
-        this._info.children = [];
+        this._children = {};
+
+        this._childrenLength = function(){
+            var tot=0;
+            objMap(this,function(){tot++;});
+            return tot;
+        }.bind(this._children);
+
+        this._childrenArray = function(/*ordered*/){
+            var arr = [];
+            /*
+            if(ordered)
+                objMap(this,function(c){arr[c._zIndex]=c;});
+            else
+            */
+            objMap(this,function(c){arr.push(c);});
+            return arr.sort(function(a,b){return a._zIndex - b._zIndex;});
+        }.bind(this._children);
+
     }
 
     /**
@@ -27,17 +45,17 @@ var DisplayObjectContainer = (function(DisplayObject){
      * OVERRIDE METHODS
      ******************************/
 
-    DisplayObjectContainer.prototype.render = function(stage) {
-        for(var c=0;c<this._info.children.length;c++) {
-            this._info.children[c].render(stage);
-        }
+    DisplayObjectContainer.prototype._render = function(stage) {
+        this._childrenArray(true).forEach(function(v){
+            v._render(stage);
+        });
     };
 
-    DisplayObjectContainer.prototype.step = function(time) {
-        for(var c=0;c<this.children.length;c++) {
-            this._info.children[c].step(time)
-        }
-        DisplayObject.prototype.step.call(this,time);
+    DisplayObjectContainer.prototype._step = function(time) {
+        this._childrenArray(true).forEach(function(v){
+            v._step(time);
+        });
+        DisplayObject.prototype._step.call(this,time);
         return true;
     };
 
@@ -45,59 +63,73 @@ var DisplayObjectContainer = (function(DisplayObject){
      * PUBLIC METHODS
      ******************************/
 
+    DisplayObjectContainer.prototype._reorderChildren = function() {
+        var arr = this._childrenArray().sort(function(a,b){return a._zIndex - b._zIndex;});
+        arr.forEach(function(v,i){
+            v._zIndex = i;
+        });
+    };
+
     // ADD CHILD
-    DisplayObjectContainer.prototype.addChild = function(child) {
+    DisplayObjectContainer.prototype.addChild = function(child,index) {
         if(!(child instanceof DisplayObject))
             throw new Error('adding child with unsupported type:',typeof(child));
+        if(this[child._name])
+            throw new Error('property "',child._name,'" already exists on',this);
 
-        this._info.children.push(child);
-        this[child._info.name] = child;
+        index || (index = this._childrenLength());
 
-        child.addTo(this,this._info.children.length-1);
+        this._children[child._name] = child;
+        this[child._name] = child;
+
+        child._addTo(this,index);
+
         return child;
     };
 
-    DisplayObjectContainer.prototype.addChildAt = function(child,zindex) {};
-
     // REMOVE CHILD
     DisplayObjectContainer.prototype.removeChild = function(child) {
-        if(child){
+        if(child instanceof String) child = this[child];
+        if(child && this[child._name] && this[child._name] instanceof DisplayObject){
             // TODO remove child from children Array!!!
-            delete this[child.name];
-            child.remove();
+            delete this[child._name];
+            child._remove();
         }
     };
 
-    DisplayObjectContainer.prototype.removeChildAt = function(child,zindex) {};
-
-    DisplayObjectContainer.prototype.removeChildByName = function(name) {
-        this.removeChild(this[name]);
-    };
-
     // GET SHAPES
-    DisplayObjectContainer.prototype.getShapes = function() {
+    DisplayObjectContainer.prototype._getShapes = function() {
         var child,shapes = [];
-        for(var c=0;c<this._info.children.length;c++){
-            child=this._info.children[c];
-            if(child.shape)
-                shapes.push(child.shape);
+        for(var c=0;c<this._children.length;c++){
+            child = this._children[c];
+            if(child._shape)
+                shapes.push(child._shape);
             if(child instanceof DisplayObjectContainer)
-                shapes = shapes.concat(child.getShapes());
+                shapes = shapes.concat(child._getShapes());
         }
         return shapes;
     };
 
-    DisplayObjectContainer.prototype.getShapesWithObjects = function() {
+    DisplayObjectContainer.prototype._getShapesWithObjects = function() {
         var child,children = [];
-        for(var c=0;c<this._info.children.length;c++){
-            child=this._info.children[c];
-            if(child.shape)
+        for(var c=0;c<this._children.length;c++){
+            child=this._children[c];
+            if(child._shape)
                 children.push(child);
             if(child instanceof DisplayObjectContainer)
-                children = children.concat(child.getShapesWithObjects());
+                children = children.concat(child._getShapesWithObjects());
         }
         return children;
     };
+
+    /******************************
+     * PRIVATE METHODS
+     ******************************/
+
+    function objMap(obj,cb) {
+        if(!obj || !cb) return;
+        for(var c in obj) if(obj.hasOwnProperty(c)) cb(obj[c]);
+    }
 
     return DisplayObjectContainer;
 
