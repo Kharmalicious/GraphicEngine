@@ -285,6 +285,8 @@ var Draw = (function(){
 
             origin = this.castToPoint(origin);
             points = points.map(function(v){return this.castToPoint(v);}.bind(this));
+
+            isIso && (origin = origin.toOrtho());
             isIso && (points = points.map(function(v){return v.toOrtho();}));
 
             var i,p,
