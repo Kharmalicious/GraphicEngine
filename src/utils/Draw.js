@@ -134,6 +134,10 @@ var Draw = (function(){
             return poly2D;
         },
 
+        image: function(source,origin){
+
+        },
+
         // CASTING METHODS
         castToColor: function(color) {
             var col =

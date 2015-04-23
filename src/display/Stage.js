@@ -10,7 +10,7 @@ var Stage = (function($,DisplayObjectContainer){
      * @param name
      * @constructor
      */
-    function Stage(name){
+    function Stage(name,isIso){
         DisplayObjectContainer.call(this,'_stage_'+name);
 
         this._engine = null;
@@ -20,6 +20,11 @@ var Stage = (function($,DisplayObjectContainer){
         this._info.context = this._info.canvas.getContext('2d');
         this._info.draw = new Draw(this._info.context);
         this._info.animator = new Animator(this.renderTime.bind(this));
+        this._info.modes = {
+            ORTHOGONAL:'ORTHOGONAL',
+            ISOMETRIC:'ISOMETRIC'
+        };
+        this._info.mode = isIso ? this._info.modes.ISOMETRIC : this._info.modes.ORTHOGONAL;
 
         this.$el = $('<div/>')
             .addClass('iso-layer')
@@ -40,7 +45,7 @@ var Stage = (function($,DisplayObjectContainer){
 
     Stage.prototype._render = function() {
         this.clear();
-        DisplayObjectContainer.prototype._render.call(this,this);
+        DisplayObjectContainer.prototype._render.call(this,this,this._info.mode==this._info.modes.ISOMETRIC);
     };
 
     Stage.prototype._remove = function() {
@@ -62,6 +67,15 @@ var Stage = (function($,DisplayObjectContainer){
     /******************************
      * PUBLIC METHODS
      ******************************/
+
+
+    Stage.prototype.toggleMode = function(mode) {
+        if(!this._info.modes[mode]) return;
+        if(this.mode==mode) return;
+
+        this.mode = mode;
+        this._render();
+    };
 
     Stage.prototype.clear = function() {
         this._info.context.clearRect( -this._info.size.w/2 , -this._info.size.h/2 , this._info.size.w , this._info.size.h );

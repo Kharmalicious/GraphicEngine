@@ -78,12 +78,12 @@ var DisplayObject = (function(ObjectModel,Point){
     };
 
     // RENDER
-    DisplayObject.prototype._render = function(stage) {
+    DisplayObject.prototype._render = function(stage,isIso) {
         if(!this._info.renderMethod) throw new Error('no renderMethod set for this instance of DisplayObject: ',this);
         if(!this._info.renderInfo) return false;
 
         stage._info.draw.setup(this._options);
-        this._shape = stage._info.draw[this._info.renderMethod](this._info.renderInfo,this._position);
+        this._shape = stage._info.draw[this._info.renderMethod](this._info.renderInfo,this._position,isIso);
         stage._info.draw.render();
 
         return true;

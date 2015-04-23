@@ -40,14 +40,14 @@ var DisplayObjectContainer = (function(DisplayObject){
      * OVERRIDE METHODS
      ******************************/
 
-    DisplayObjectContainer.prototype._render = function(stage) {
-        this._childrenArray(true).forEach(function(v){
-            v._render(stage);
+    DisplayObjectContainer.prototype._render = function(stage,isIso) {
+        this._childrenArray().forEach(function(v){
+            v._render(stage,isIso);
         });
     };
 
     DisplayObjectContainer.prototype._step = function(time) {
-        this._childrenArray(true).forEach(function(v){
+        this._childrenArray().forEach(function(v){
             v._step(time);
         });
         DisplayObject.prototype._step.call(this,time);

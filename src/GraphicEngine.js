@@ -81,11 +81,12 @@ var GraphicEngine = (function($,GEPackage,Stage,Point){
         /**
          * Adds a new layer (Stage instance) and returns it.
          *
-         * @param name {String} new layer's name
-         * @returns {Stage}     newly added layer
+         * @param name {String}   new layer's name
+         * @param isIso {Boolean}
+         * @returns {Stage}       newly added layer
          */
-        addLayer: function(name) {
-            var layer = new Stage(name);
+        addLayer: function(name,isIso) {
+            var layer = new Stage(name,isIso);
             layer._addTo(this);
 
             this.layers[name] = layer;
@@ -166,7 +167,7 @@ var GraphicEngine = (function($,GEPackage,Stage,Point){
             return objects;
         },
 
-        draw: {
+        drawUtils: {
 
             grid: function(stage,size,unit,opt,isIso) {
                 if(!stage) throw new Error('calling draw method without providing a Stage instance');
