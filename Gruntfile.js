@@ -11,7 +11,7 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
 
         opt: {
-            header: '/*! GraphicEngine Package - v<%= pkg.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd") %> */',
+            header: '/*! <%= pkg.title %> Package - v<%= pkg.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd") %> */',
             footer: '',
             nl: grunt.util.linefeed
         },
@@ -46,8 +46,8 @@ module.exports = function(grunt) {
 
             main: {
                 options: {
-                    banner: '<%= opt.fibos_header %><%= brandMsg %><%= opt.nl %>'+
-                    'var GraphicEngine = (function(){' + '<%= opt.nl %>'+
+                    banner: '<%= opt.header %><%= opt.nl %>'+
+                    'var <%= pkg.title %> = (function(){' + '<%= opt.nl %>'+
                     'var geVersion = "v<%= pkg.version %>";' + '<%= opt.nl %>',
                     footer: '<%= opt.nl %>'+
                     'return GraphicEngine;}());'
