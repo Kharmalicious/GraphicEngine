@@ -179,26 +179,26 @@ var GraphicEngine = (function($,GEPackage,Stage,Point){
 
                 var from,to;
 
-                stage.draw.setup(opt);
+                stage._info.draw.setup(opt);
                 for (var w=0;w<=size[0];w++) {
                     from = new Point(w*unit,0);
                     to = new Point(w*unit,size[0]*unit);
-                    stage.draw.line(from,to,isIso);
+                    stage._info.draw.line(from,to,isIso);
                 }
                 for (var h=0;h<=size[1];h++) {
                     from = new Point(0,h*unit);
                     to = new Point(size[1]*unit,h*unit);
-                    stage.draw.line(from,to,isIso);
+                    stage._info.draw.line(from,to,isIso);
                 }
-                stage.draw.render();
+                stage._info.draw.render();
             },
 
             line: function(stage,from,to,opt,isIso) {
                 if(stage==null || from==null || to==null) return;
 
-                opt && stage.draw.setup(opt);
-                stage.draw.line(from,to,isIso);
-                stage.draw.render();
+                opt && stage._info.draw.setup(opt);
+                stage._info.draw.line(from,to,isIso);
+                stage._info.draw.render();
             },
 
             axis: function(stage,length,isIso) {
@@ -208,11 +208,11 @@ var GraphicEngine = (function($,GEPackage,Stage,Point){
                 var aY = [0,length,0];
                 var aZ = [0,0,length];
 
-                stage.draw.setup({strokeColor:0x0});
-                stage.draw.line([0, 0, 0], aX, isIso);
-                stage.draw.line([0, 0, 0], aY, isIso);
-                stage.draw.line([0, 0, 0], aZ, isIso);
-                stage.draw.render();
+                stage._info.draw.setup({strokeColor:0x0});
+                stage._info.draw.line([0, 0, 0], aX, isIso);
+                stage._info.draw.line([0, 0, 0], aY, isIso);
+                stage._info.draw.line([0, 0, 0], aZ, isIso);
+                stage._info.draw.render();
             },
 
             get3DPolygonSquare: function(size) {
