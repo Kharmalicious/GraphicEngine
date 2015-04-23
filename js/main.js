@@ -10,10 +10,10 @@ $(document).ready(function(){
 
     isoGrid = isoEngine.addLayer('grid');
 
-    isoEngine.draw.grid(isoGrid);
-    isoEngine.draw.axis(isoGrid,200);
+    isoEngine.draw.grid(isoGrid,null,null,null,true);
+    isoEngine.draw.axis(isoGrid,200,true);
 
-    drawSquare(isoGrid,[15,15,0],40,{fillColor:0xff0000,strokeColor:0x00ff00});
+    drawSquare(isoGrid,[15,15,0],40,{fillColor:0xff0000,strokeColor:0x00ff00},true);
 
 });
 
