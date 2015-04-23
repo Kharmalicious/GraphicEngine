@@ -18,7 +18,7 @@ $(document).ready(function(){
 });
 
 function drawSquare(stage,origin,size,opt,isIso) {
-    var points = stage.parent.get3DPolygonSquare(size);
+    var points = stage.parent.draw.get3DPolygonSquare(size);
     stage._info.draw.setup(opt);
     stage._info.draw.polygon(points,origin,isIso);
     stage._info.draw.render();
