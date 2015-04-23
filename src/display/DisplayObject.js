@@ -83,7 +83,7 @@ var DisplayObject = (function(ObjectModel,Point){
         if(!this._info.renderInfo) return false;
 
         stage._info.draw.setup(this._options);
-        this._shape = stage.draw[this._info.renderMethod](this._info.renderInfo,this._position);
+        this._shape = stage._info.draw[this._info.renderMethod](this._info.renderInfo,this._position);
         stage._info.draw.render();
 
         return true;
