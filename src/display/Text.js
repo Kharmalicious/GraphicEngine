@@ -27,6 +27,20 @@ var Text = (function(DisplayObject){
      */
     Text.prototype = Object.create( DisplayObject.prototype );
 
+    Text.prototype.getFont = function(font,size,style) {
+        if(!font) return '';
+        style || (style = '');
+        size || (size = '');
+        typeof(size)=='number' && (size = size+'px');
+        return [style,size,font].join(' ');
+    };
+
+    Text.prototype.setFont = function(font,size,style) {
+        if(!font) return false;
+        this.options.font = this.getFont(font,size,style);
+        return true;
+    };
+
     return Text;
 
 }(DisplayObject));
