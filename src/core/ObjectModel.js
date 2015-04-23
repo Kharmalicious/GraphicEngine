@@ -26,11 +26,11 @@ var ObjectModel = (function(){
             return this._attributes[key];
         },
 
-        extend: function(obj,ext) {
+        _extend: function(obj,ext) {
             if(!ext) return;
             for(var p in ext){
                 if(ext.hasOwnProperty(p)){
-                    if(obj[p] && (obj[p] instanceof Object) && !(obj[p] instanceof Array)) this.extend(obj[p],ext[p]);
+                    if(obj[p] && (obj[p] instanceof Object) && !(obj[p] instanceof Array)) this._extend(obj[p],ext[p]);
                     else obj[p] = ext[p];
                 }
             }

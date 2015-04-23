@@ -50,22 +50,31 @@ var DisplayObject = (function(ObjectModel,Point){
      * PUBLIC METHODS
      ******************************/
 
-    // ADD/REMOVE
-    DisplayObject.prototype._addTo = function(parent,zindex) {
-
-        this._zIndex = zindex || 0;
-        this._parent = parent;
-
-    };
-    DisplayObject.prototype._remove = function() {
-        delete this;
-    };
-
     // OPTIONS
     DisplayObject.prototype.setOptions = function(opts) {
         if(!opts) return false;
-        this.extend(this._options,opts);
+        this._extend(this._options,opts);
         return true;
+    };
+    DisplayObject.prototype.setRenderInfo = function(info, opts) {
+        opts && this.setOptions(opts);
+        this._info.renderInfo = info;
+    };
+    DisplayObject.prototype.setAnimationStep = function(callback) {
+        this._info.stepCallback = callback;
+    };
+
+    /******************************
+     * INTERNAL METHODS
+     ******************************/
+
+    // ADD/REMOVE
+    DisplayObject.prototype._addTo = function(parent,zindex) {
+        this._zIndex = zindex || 0;
+        this._parent = parent;
+    };
+    DisplayObject.prototype._remove = function() {
+        delete this;
     };
 
     // RENDER
@@ -79,20 +88,11 @@ var DisplayObject = (function(ObjectModel,Point){
 
         return true;
     };
-    DisplayObject.prototype.setRenderInfo = function(info, opts) {
-        opts && this.setOptions(opts);
-        this._info.renderInfo = info;
-    };
 
     // ANIMATION
     DisplayObject.prototype._step = function(time) {
-        if(this._info.stepCallback){
-            this._info.stepCallback(time);
-        }
+        this._info.stepCallback && this._info.stepCallback(time);
         return true;
-    };
-    DisplayObject.prototype.setAnimationStep = function(callback) {
-        this._info.stepCallback = callback;
     };
 
     return DisplayObject;

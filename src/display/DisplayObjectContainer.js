@@ -21,13 +21,8 @@ var DisplayObjectContainer = (function(DisplayObject){
             return tot;
         }.bind(this._children);
 
-        this._childrenArray = function(/*ordered*/){
+        this._childrenArray = function(){
             var arr = [];
-            /*
-            if(ordered)
-                objMap(this,function(c){arr[c._zIndex]=c;});
-            else
-            */
             objMap(this,function(c){arr.push(c);});
             return arr.sort(function(a,b){return a._zIndex - b._zIndex;});
         }.bind(this._children);
@@ -63,13 +58,6 @@ var DisplayObjectContainer = (function(DisplayObject){
      * PUBLIC METHODS
      ******************************/
 
-    DisplayObjectContainer.prototype._reorderChildren = function() {
-        var arr = this._childrenArray().sort(function(a,b){return a._zIndex - b._zIndex;});
-        arr.forEach(function(v,i){
-            v._zIndex = i;
-        });
-    };
-
     // ADD CHILD
     DisplayObjectContainer.prototype.addChild = function(child,index) {
         if(!(child instanceof DisplayObject))
@@ -84,6 +72,8 @@ var DisplayObjectContainer = (function(DisplayObject){
 
         child._addTo(this,index);
 
+        this._reorderChildren();
+
         return child;
     };
 
@@ -91,10 +81,21 @@ var DisplayObjectContainer = (function(DisplayObject){
     DisplayObjectContainer.prototype.removeChild = function(child) {
         if(child instanceof String) child = this[child];
         if(child && this[child._name] && this[child._name] instanceof DisplayObject){
-            // TODO remove child from children Array!!!
+            delete this._children[child._name];
             delete this[child._name];
             child._remove();
         }
+    };
+
+    /******************************
+     * INTERNAL METHODS
+     ******************************/
+
+    // REORDER CHILDREN
+    DisplayObjectContainer.prototype._reorderChildren = function() {
+        this._childrenArray().forEach(function(v,i){
+            v._info.index = i;
+        });
     };
 
     // GET SHAPES
