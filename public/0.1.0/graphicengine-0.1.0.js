@@ -58,7 +58,7 @@ var Point = (function(){
 
     Point.prototype = {
         toOrtho  : function() { return new Point([(this.x - this.y), ((this.x + this.y)/2)-(this.z*1.25)], 0); },
-        toIso    : function()   { return new Point([this.y + (this.x/2), this.y - (this.x/2)], 0); },
+        toIso    : function() { return new Point([this.y + (this.x/2), this.y - (this.x/2)], 0); },
 
         toString : function() { return "{x:"+this.x+", y:"+this.y+", z:"+this.z+"}"; },
         toObject : function() { return {x:this.x,y:this.y,z:this.z}; },
@@ -203,11 +203,13 @@ var Draw = (function(){
             var strokeColor = opt.strokeColor==null ? null : this.castToColor(opt.strokeColor);
             var strokeSize  = opt.strokeSize;
 
+            this.context.restore();
             this.context.fillStyle   = fillColor;
             this.context.strokeStyle = strokeColor;
             this.context.lineWidth   = strokeSize;
             this.context.globalAlpha = opt.alpha || 1;
             this.context.font        = opt.font  || '20px Open Sans';
+            this.context.save();
 
             this.isStroke = strokeColor!=null;
             this.isPath = fillColor!=null;
@@ -220,11 +222,6 @@ var Draw = (function(){
                 this.message = null;
             }
 
-            console.log('### Draw.render() ###');
-            console.log('isPath',this.isPath);
-            console.log('isStroke',this.isStroke);
-            console.log('context',this.context);
-
             this.isPath && this.context.closePath();
             this.isPath && this.context.fill();
             this.isPath = false;
@@ -236,13 +233,11 @@ var Draw = (function(){
         moveTo: function(x,y) {
             var canDraw = (this.isPath || this.isStroke);
             canDraw && this.context.moveTo(x,y);
-            console.log('Draw.moveTo(%d,%d) - canDraw ? %o',x,y,canDraw);
             return canDraw;
         },
         lineTo: function(x,y) {
             var canDraw = (this.isPath || this.isStroke);
             canDraw && this.context.lineTo(x,y);
-            console.log('Draw.lineTo(%d,%d) - canDraw ? %o',x,y,canDraw);
             return canDraw;
         },
 
@@ -310,8 +305,8 @@ var Draw = (function(){
         castToColor: function(color) {
             var col =
                 typeof(color) == "string" ? color :
-                    typeof(color) == "number" ? color.toString(16) :
-                        null;
+                typeof(color) == "number" ? color.toString(16) :
+                null;
 
             col!=null && col.substr(0,1)=='#' && (col = col.substr(1));
             col!=null && (col = '#' + ('00000'+col).substr(-6));
@@ -1007,19 +1002,9 @@ var GraphicEngine = (function($,GEPackage,Stage,Point){
                 opt.strokeColor || (opt.strokeColor = 0);
                 opt.alpha       || (opt.alpha =.8);
 
-                var from,to;
-
                 stage._info.draw.setup(opt);
-                for (var w=0;w<=size[0];w++) {
-                    from = new Point(w*unit,0);
-                    to = new Point(w*unit,size[0]*unit);
-                    stage._info.draw.line(from,to,isIso);
-                }
-                for (var h=0;h<=size[1];h++) {
-                    from = new Point(0,h*unit);
-                    to = new Point(size[1]*unit,h*unit);
-                    stage._info.draw.line(from,to,isIso);
-                }
+                for(var w=0;w<=size[0];w++) stage._info.draw.line([w*unit,0], [w*unit,size[0]*unit], isIso);
+                for(var h=0;h<=size[1];h++) stage._info.draw.line([0,h*unit], [size[1]*unit,h*unit], isIso);
                 stage._info.draw.render();
             },
 
