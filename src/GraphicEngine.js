@@ -73,7 +73,7 @@ var GraphicEngine = (function($,GEPackage,Stage,Point){
         render: function() {
             for(var l in this.layers){
                 if(this.layers.hasOwnProperty(l)){
-                    this.layers[l].render();
+                    this.layers[l]._render();
                 }
             }
         },
