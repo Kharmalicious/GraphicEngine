@@ -13,14 +13,13 @@ var Stage = (function($,DisplayObjectContainer){
     function Stage(name){
         DisplayObjectContainer.call(this,'_stage_'+name);
 
-        this._info.animator = new Animator(this.renderTime.bind(this));
+        this._engine = null;
 
         this._info.size = {w:0,h:0};
-        this._info.grid = false;
-
         this._info.canvas = document.createElement('canvas');
         this._info.context = this._info.canvas.getContext('2d');
         this._info.draw = new Draw(this._info.context);
+        this._info.animator = new Animator(this.renderTime.bind(this));
 
         this.$el = $('<div/>')
             .addClass('iso-layer')
@@ -57,7 +56,7 @@ var Stage = (function($,DisplayObjectContainer){
         var world_size = engine.worldSize();
         this.setSize(world_size.w, world_size.h);
         this.$el.appendTo(engine.$el);
-        this.parent = engine;
+        this._engine = engine;
     };
 
     /******************************
@@ -73,7 +72,7 @@ var Stage = (function($,DisplayObjectContainer){
     };
 
     Stage.prototype.renderTime = function(time) {
-        this.step(time) && this.render();
+        this._step(time) && this._render();
     };
 
     Stage.prototype.startAnimation = function(timeout) {
