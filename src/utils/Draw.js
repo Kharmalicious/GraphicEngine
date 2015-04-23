@@ -34,11 +34,13 @@ var Draw = (function(){
             var strokeColor = opt.strokeColor==null ? null : this.castToColor(opt.strokeColor);
             var strokeSize  = opt.strokeSize;
 
+            this.context.restore();
             this.context.fillStyle   = fillColor;
             this.context.strokeStyle = strokeColor;
             this.context.lineWidth   = strokeSize;
             this.context.globalAlpha = opt.alpha || 1;
             this.context.font        = opt.font  || '20px Open Sans';
+            this.context.save();
 
             this.isStroke = strokeColor!=null;
             this.isPath = fillColor!=null;
@@ -51,11 +53,6 @@ var Draw = (function(){
                 this.message = null;
             }
 
-            console.log('### Draw.render() ###');
-            console.log('isPath',this.isPath);
-            console.log('isStroke',this.isStroke);
-            console.log('context',this.context);
-
             this.isPath && this.context.closePath();
             this.isPath && this.context.fill();
             this.isPath = false;
@@ -67,13 +64,11 @@ var Draw = (function(){
         moveTo: function(x,y) {
             var canDraw = (this.isPath || this.isStroke);
             canDraw && this.context.moveTo(x,y);
-            console.log('Draw.moveTo(%d,%d) - canDraw ? %o',x,y,canDraw);
             return canDraw;
         },
         lineTo: function(x,y) {
             var canDraw = (this.isPath || this.isStroke);
             canDraw && this.context.lineTo(x,y);
-            console.log('Draw.lineTo(%d,%d) - canDraw ? %o',x,y,canDraw);
             return canDraw;
         },
 
@@ -141,8 +136,8 @@ var Draw = (function(){
         castToColor: function(color) {
             var col =
                 typeof(color) == "string" ? color :
-                    typeof(color) == "number" ? color.toString(16) :
-                        null;
+                typeof(color) == "number" ? color.toString(16) :
+                null;
 
             col!=null && col.substr(0,1)=='#' && (col = col.substr(1));
             col!=null && (col = '#' + ('00000'+col).substr(-6));

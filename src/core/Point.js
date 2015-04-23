@@ -12,7 +12,7 @@ var Point = (function(){
 
     Point.prototype = {
         toOrtho  : function() { return new Point([(this.x - this.y), ((this.x + this.y)/2)-(this.z*1.25)], 0); },
-        toIso    : function()   { return new Point([this.y + (this.x/2), this.y - (this.x/2)], 0); },
+        toIso    : function() { return new Point([this.y + (this.x/2), this.y - (this.x/2)], 0); },
 
         toString : function() { return "{x:"+this.x+", y:"+this.y+", z:"+this.z+"}"; },
         toObject : function() { return {x:this.x,y:this.y,z:this.z}; },

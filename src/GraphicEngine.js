@@ -178,19 +178,9 @@ var GraphicEngine = (function($,GEPackage,Stage,Point){
                 opt.strokeColor || (opt.strokeColor = 0);
                 opt.alpha       || (opt.alpha =.8);
 
-                var from,to;
-
                 stage._info.draw.setup(opt);
-                for (var w=0;w<=size[0];w++) {
-                    from = new Point(w*unit,0);
-                    to = new Point(w*unit,size[0]*unit);
-                    stage._info.draw.line(from,to,isIso);
-                }
-                for (var h=0;h<=size[1];h++) {
-                    from = new Point(0,h*unit);
-                    to = new Point(size[1]*unit,h*unit);
-                    stage._info.draw.line(from,to,isIso);
-                }
+                for(var w=0;w<=size[0];w++) stage._info.draw.line([w*unit,0], [w*unit,size[0]*unit], isIso);
+                for(var h=0;h<=size[1];h++) stage._info.draw.line([0,h*unit], [size[1]*unit,h*unit], isIso);
                 stage._info.draw.render();
             },
 
