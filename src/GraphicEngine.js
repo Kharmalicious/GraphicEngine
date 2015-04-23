@@ -38,7 +38,7 @@ var GraphicEngine = (function($,GEPackage,Stage,Point){
          */
         init: function(elem,options){
             if(!elem) throw new Error('no "elem" param passed to new GraphicEngine instance');
-            if(options) $.extend(this.utils,options);
+            if(options) $.extend(true,this.utils,options);
             this.setWorld(elem);
         },
 
@@ -169,6 +169,7 @@ var GraphicEngine = (function($,GEPackage,Stage,Point){
         draw: {
 
             grid: function(stage,size,unit,opt,isIso) {
+                if(!stage) throw new Error('calling draw method without providing a Stage instance');
                 size || (size = [10,10]);
                 unit || (unit = 10);
                 opt  || (opt = {});
@@ -194,7 +195,8 @@ var GraphicEngine = (function($,GEPackage,Stage,Point){
             },
 
             line: function(stage,from,to,opt,isIso) {
-                if(stage==null || from==null || to==null) return;
+                if(!stage) throw new Error('calling draw method without providing a Stage instance');
+                if(from==null || to==null) return;
 
                 opt && stage._info.draw.setup(opt);
                 stage._info.draw.line(from,to,isIso);
@@ -202,6 +204,7 @@ var GraphicEngine = (function($,GEPackage,Stage,Point){
             },
 
             axis: function(stage,length,isIso) {
+                if(!stage) throw new Error('calling draw method without providing a Stage instance');
                 length || (length=100);
 
                 var aX = [length,0,0];

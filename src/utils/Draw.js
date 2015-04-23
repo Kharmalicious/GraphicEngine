@@ -51,6 +51,11 @@ var Draw = (function(){
                 this.message = null;
             }
 
+            console.log('### Draw.render() ###');
+            console.log('isPath',this.isPath);
+            console.log('isStroke',this.isStroke);
+            console.log('context',this.context);
+
             this.isPath && this.context.closePath();
             this.isPath && this.context.fill();
             this.isPath = false;
@@ -62,11 +67,13 @@ var Draw = (function(){
         moveTo: function(x,y) {
             var canDraw = (this.isPath || this.isStroke);
             canDraw && this.context.moveTo(x,y);
+            console.log('Draw.moveTo(%d,%d) - canDraw ? %o',x,y,canDraw);
             return canDraw;
         },
         lineTo: function(x,y) {
             var canDraw = (this.isPath || this.isStroke);
             canDraw && this.context.lineTo(x,y);
+            console.log('Draw.lineTo(%d,%d) - canDraw ? %o',x,y,canDraw);
             return canDraw;
         },
 
@@ -105,8 +112,7 @@ var Draw = (function(){
                 to = to.toOrtho();
             }
 
-            var coord = {from:from, to:to};
-            return this.moveTo(coord.from.x, coord.from.y) && this.lineTo(coord.to.x, coord.to.y);
+            return this.moveTo(from.x, from.y) && this.lineTo(to.x, to.y);
         },
 
         polygon: function(points,origin,isIso) {
@@ -124,12 +130,12 @@ var Draw = (function(){
                 o = origin.add(points[0]);
             var poly2D = [];
 
-            this.moveTo(o.x,o.y) && poly2D.push(o);
+            this.moveTo(o.x, o.y) && poly2D.push(o);
             for(i=1; i<points.length; i++){
                 p = origin.add(points[i]);
                 this.lineTo(p.x, p.y) && poly2D.push(p);
             }
-            this.lineTo(o.x,o.y);// && poly2D.push(o);
+            this.lineTo(o.x, o.y);// && poly2D.push(o);
 
             return poly2D;
         },
