@@ -5,9 +5,9 @@
 var Point = (function(){
 
     function Point(x,y,z) {
-        this.x=x||0;
-        this.y=y||0;
-        this.z=z||0;
+        this.x = parseFloat(x)||0;
+        this.y = parseFloat(y)||0;
+        this.z = parseFloat(z)||0;
     }
 
     Point.prototype = {

@@ -157,9 +157,9 @@ var Draw = (function(){
             if(coord instanceof Point)
                 point = coord;
             else if(typeof(coord)=='object' && coord.x!=null && coord.y!=null)
-                point = new Point(coord.x, coord.y, coord.z);
+                point = new Point(parseFloat(coord.x), parseFloat(coord.y), parseFloat(coord.z));
             else if(typeof(coord)=='object' && coord.length>1 && coord.length<4)
-                point = new Point(coord[0], coord[1], coord[2]);
+                point = new Point(parseFloat(coord[0]), parseFloat(coord[1]), parseFloat(coord[2]));
             return point;
         }
 
