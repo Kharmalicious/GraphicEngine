@@ -37,7 +37,7 @@ var Text = (function(DisplayObject){
 
     Text.prototype.setFont = function(font,size,style) {
         if(!font) return false;
-        this.options.font = this.getFont(font,size,style);
+        this._options.font = this.getFont(font,size,style);
         return true;
     };
 
