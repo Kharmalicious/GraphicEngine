@@ -117,14 +117,11 @@ var Draw = (function(){
 
         polygon: function(points,origin,isIso) {
             if(!points) return [];
-            if(!origin) origin = [0,0];
-            origin = this.castToPoint(origin);
+            if(!origin) origin = [0,0,0];
 
-            if(isIso){
-                points = points.map(function(v){
-                    return this.castToPoint(v).toOrtho();
-                }.bind(this));
-            }
+            origin = this.castToPoint(origin);
+            points = points.map(function(v){return this.castToPoint(v);}.bind(this));
+            isIso && (points = points.map(function(v){return v.toOrtho();}));
 
             var i,p,
                 o = origin.add(points[0]);
