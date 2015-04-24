@@ -2,7 +2,7 @@
  * Created by fdimonte on 20/04/2015.
  */
 
-var GraphicEngine = (function($,GEPackage,Stage,Point){
+var GraphicEngine = (function($,Stage){
 
     /**
      * GraphicEngine Class
@@ -252,4 +252,4 @@ var GraphicEngine = (function($,GEPackage,Stage,Point){
 
     return GraphicEngine;
 
-}(jQuery,GEPackage,Stage,Point));
+}(jQuery,Stage));

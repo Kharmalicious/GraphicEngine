@@ -24,7 +24,7 @@ module.exports = function(grunt) {
                 //separator: grunt.util.linefeed+';'+grunt.util.linefeed
             },
 
-            ge_package: {
+            packages: {
                 src: [
                     'src/core/ObjectModel.js',
                     'src/core/Point.js',
@@ -41,7 +41,7 @@ module.exports = function(grunt) {
                     'src/display/Stage.js',
                     'src/display/Sprite.js'
                 ],
-                dest: 'target/temp/ge_package.js'
+                dest: 'target/temp/packages.js'
             },
 
             main: {
@@ -53,7 +53,7 @@ module.exports = function(grunt) {
                     'return GraphicEngine;}());'
                 },
                 src: [
-                    'target/temp/ge_package.js',
+                    'target/temp/packages.js',
                     'target/GEPackage.js',
                     'src/GraphicEngine.js'
                 ],
@@ -138,59 +138,11 @@ module.exports = function(grunt) {
      *
      ****************************************/
 
-    // Private methods
-    function filesList(path,base){
-        base || (base=path);
-
-        var className,packageName,
-            fs = require('fs'),
-            files = fs.readdirSync(path),
-            ret = {
-                packages: [],
-                rows: []
-            };
-
-        files.forEach(function(v){
-            var s = fs.statSync(path+v);
-            if(s.isFile()){
-                className = v.replace('.js','');
-                packageName = path.replace(base,'').replace('/','');
-                path!=base && ret.packages.push(className);
-                path!=base && ret.rows.push('gep["'+packageName+'"]["'+className+'"]='+className+';');
-            }
-            else if(s.isDirectory()){
-                ret.packages = ret.packages.concat(filesList(path+v+'/',base).packages);
-                ret.rows.push('gep["'+v+'"]={};');
-                ret.rows = ret.rows.concat(filesList(path+v+'/',base).rows);
-            }
-        });
-
-        return ret;
-    }
-
-    // --- METHOD tasks --- //
-
-    // Full GraphicEngine packages
-    grunt.registerTask('create_package','',function(){
-        var ln = grunt.util.linefeed,
-            fl = filesList('src/'),
-            rows = fl.rows.join(ln),
-            packages = fl.packages.join(','),
-            output = [];
-
-        output.push('var GEPackage = (function('+packages+'){');
-        output.push('var gep={};');
-        output.push(rows);
-        output.push('return gep;');
-        output.push('}('+packages+'));');
-
-        grunt.file.write('target/GEPackage.js', output.join(ln));
-    });
-
-    // --- ALIAS tasks --- //
+    // External tasks
+    grunt.loadTasks('tasks');
 
     // Full tasks
-    grunt.registerTask('build', ['clean:target', 'create_package', 'concat:ge_package', 'concat:main', 'uglify:main', 'copy:main', 'clean:target']);
+    grunt.registerTask('build', ['clean:target', 'create_package:ge', 'concat:packages', 'concat:main', 'uglify:main', 'copy:main', 'clean:target']);
     grunt.registerTask('deploy', ['clean:deploy', 'build', 'copy:deploy']);
 
     // Default task
