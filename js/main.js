@@ -2,7 +2,7 @@ var isoEngine,isoGrid;
 
 $(document).ready(function(){
 
-    isoEngine = new GraphicEngine();
+    isoEngine = new GraphicEngine.core.Engine();
     isoEngine.init($('#iso-container'),{
         worldSizeWidth  : 500,
         worldSizeHeight : 500
