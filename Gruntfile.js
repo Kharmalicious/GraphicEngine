@@ -94,9 +94,7 @@ module.exports = function(grunt) {
             main: {
                 files: [
                     {
-                        expand: true,
-                        flatten: true,
-                        filter: 'isFile',
+                        expand: true,flatten: true,filter: 'isFile',
                         src: ['target/<%= pkg.name %>*'],
                         dest: 'build/<%= pkg.version %>/'
                     }
@@ -106,9 +104,13 @@ module.exports = function(grunt) {
             deploy: {
                 files: [
                     {
-                        expand: true,
-                        flatten: true,
-                        filter: 'isFile',
+                        expand: true,flatten: true,filter: 'isFile',
+                        opt: {from:'<%= pkg.name %>',to:'<%= pkg.name %>-latest'},
+                        dest: 'public/', src: ['build/<%= pkg.version %>/<%= pkg.name %>-<%= pkg.version %>.min.js'],
+                        rename: function(dest, src) {return dest + src.replace(/[0-9]/g,'').replace(/-\.\./,'').replace(this.opt.from,this.opt.to);}
+                    },
+                    {
+                        expand: true,flatten: true,filter: 'isFile',
                         src: ['build/<%= pkg.version %>/<%= pkg.name %>-<%= pkg.version %>.min.js'],
                         dest: 'public/<%= pkg.version %>/'
                     }
