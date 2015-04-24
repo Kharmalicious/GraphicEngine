@@ -2,14 +2,14 @@
  * Created by fdimonte on 20/04/2015.
  */
 
-var GraphicEngine = (function($,Stage){
+var Engine = (function($,Stage){
 
     /**
-     * GraphicEngine Class
+     * Engine Class
      *
      * @constructor
      */
-    function GraphicEngine() {
+    function Engine() {
         this.$el = $('<div/>');
         this.layers = {};
         this.fpsInterval = null;
@@ -21,14 +21,11 @@ var GraphicEngine = (function($,Stage){
     }
 
     /**
-     * GraphicEngine prototype
+     * Engine prototype
      *
      * @type {{package: *, init: Function, setWorld: Function, worldSize: Function, render: Function, addLayer: Function, removeLayer: Function, showFPS: Function, hideFPS: Function, screenToWorld: Function, getObjectsAtScreenCoord: Function}}
      */
-    GraphicEngine.prototype = {
-
-        // var GEPackage is declared in target/GEPackage.js wrote by Grunt Task 'grunt create_package'
-        packages: GEPackage,
+    Engine.prototype = {
 
         /**
          * This method initialize the graphic engine binding it to the given element and options calling this.setWorld
@@ -37,7 +34,7 @@ var GraphicEngine = (function($,Stage){
          * @param options {Object} a set of options to override default values
          */
         init: function(elem,options){
-            if(!elem) throw new Error('no "elem" param passed to new GraphicEngine instance');
+            if(!elem) throw new Error('no "elem" param passed to new Engine instance');
             if(options) $.extend(true,this.utils,options);
             this.setWorld(elem);
         },
@@ -250,6 +247,6 @@ var GraphicEngine = (function($,Stage){
         return c;
     }
 
-    return GraphicEngine;
+    return Engine;
 
 }(jQuery,Stage));

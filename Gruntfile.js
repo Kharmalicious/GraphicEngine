@@ -21,7 +21,7 @@ module.exports = function(grunt) {
          ********************/
         concat: {
             options: {
-                //separator: grunt.util.linefeed+';'+grunt.util.linefeed
+                separator: grunt.util.linefeed
             },
 
             packages: {
@@ -39,7 +39,9 @@ module.exports = function(grunt) {
 
                     'src/display/DisplayObjectContainer.js',
                     'src/display/Stage.js',
-                    'src/display/Sprite.js'
+                    'src/display/Sprite.js',
+
+                    'src/core/Engine.js'
                 ],
                 dest: 'target/temp/packages.js'
             },
@@ -48,14 +50,13 @@ module.exports = function(grunt) {
                 options: {
                     banner: '<%= opt.header %><%= opt.nl %>'+
                     'var <%= pkg.title %> = (function(){' + '<%= opt.nl %>'+
-                    'var geVersion = "v<%= pkg.version %>";' + '<%= opt.nl %>',
+                    'var pkgVersion = "v<%= pkg.version %>";' + '<%= opt.nl %>',
                     footer: '<%= opt.nl %>'+
-                    'return GraphicEngine;}());'
+                    'return <%= pkg.title %>Package;}());'
                 },
                 src: [
                     'target/temp/packages.js',
-                    'target/GEPackage.js',
-                    'src/GraphicEngine.js'
+                    'target/<%= pkg.title %>Package.js'
                 ],
                 dest: 'target/<%= pkg.name %>-<%= pkg.version %>.js'
             }
@@ -142,7 +143,7 @@ module.exports = function(grunt) {
     grunt.loadTasks('tasks');
 
     // Full tasks
-    grunt.registerTask('build', ['clean:target', 'create_package:ge', 'concat:packages', 'concat:main', 'uglify:main', 'copy:main', 'clean:target']);
+    grunt.registerTask('build', ['clean:target', 'create_package', 'concat:packages', 'concat:main', 'uglify:main', 'copy:main', 'clean:target']);
     grunt.registerTask('deploy', ['clean:deploy', 'build', 'copy:deploy']);
 
     // Default task
