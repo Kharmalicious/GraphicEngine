@@ -151,7 +151,7 @@ var Engine = (function($,Stage){
 
             for(var l in this.layers){
                 if(this.layers.hasOwnProperty(l)){
-                    shapes = shapes.concat(this.layers[l].getShapesWithObjects());
+                    shapes = shapes.concat(this.layers[l]._getShapesWithObjects());
                 }
             }
 
@@ -160,7 +160,7 @@ var Engine = (function($,Stage){
                 if(shapes[s].shape && isPointInPoly(shapes[s].shape,worldCoord))
                     objects.push(shapes[s]);
 
-            objects.sort(function(a,b){return (b.zindex - a.zindex);});
+            objects.sort(function(a,b){return (b.zIndex - a.zIndex);});
             return objects;
         },
 
