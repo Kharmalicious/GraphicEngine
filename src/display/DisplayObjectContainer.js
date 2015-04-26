@@ -112,9 +112,9 @@ var DisplayObjectContainer = (function(DisplayObject){
     };
 
     DisplayObjectContainer.prototype._getShapesWithObjects = function() {
-        var child,children = [];
-        for(var c=0;c<this._children.length;c++){
-            child=this._children[c];
+        var child,cArr=this._childrenArray(),children = [];
+        for(var c=0;c<cArr.length;c++){
+            child=cArr[c];
             if(child._shape)
                 children.push(child);
             if(child instanceof DisplayObjectContainer)

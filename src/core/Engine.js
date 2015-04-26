@@ -157,7 +157,7 @@ var Engine = (function($,Stage){
 
             var objects=[];
             for(var s=0;s<shapes.length;s++)
-                if(shapes[s].shape && isPointInPoly(shapes[s].shape,worldCoord))
+                if(shapes[s]._shape && isPointInPoly(shapes[s]._shape,worldCoord))
                     objects.push(shapes[s]);
 
             objects.sort(function(a,b){return (b.zIndex - a.zIndex);});

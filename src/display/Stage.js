@@ -21,8 +21,8 @@ var Stage = (function($,DisplayObjectContainer){
         this._info.draw = new Draw(this._info.context);
         this._info.animator = new Animator(this.renderTime.bind(this));
         this._info.modes = {
-            ORTHOGONAL:'ORTHOGONAL',
-            ISOMETRIC:'ISOMETRIC'
+            ORTHOGONAL : 'ORTHOGONAL',
+            ISOMETRIC  : 'ISOMETRIC'
         };
         this._info.mode = isIso ? this._info.modes.ISOMETRIC : this._info.modes.ORTHOGONAL;
 

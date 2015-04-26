@@ -61,7 +61,7 @@ var DisplayObject = (function(ObjectModel,Point){
         this._info.renderInfo = info;
     };
     DisplayObject.prototype.setAnimationStep = function(callback) {
-        this._info.stepCallback = callback;
+        this._info.stepCallback = callback.bind(this);
     };
 
     /******************************
