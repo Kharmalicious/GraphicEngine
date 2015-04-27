@@ -2,7 +2,7 @@
   "name": "graphicengine",
   "title": "GraphicEngine",
   "description": "Brings Flash-like coding style into JavaScript environment using HTMLCanvasElement",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": {
     "name": "FabioDiMonte"
   },
